@@ -2,6 +2,8 @@ package sjj.alog;
 
 import android.util.Log;
 
+import sjj.alog.file.LogFile;
+
 /**
  * Created by SJJ on 2017/3/5.
  */
@@ -24,7 +26,7 @@ class Logger {
     void l(int lev, String tag, String msg) {
         writeToFile(lev, tag, msg, null);
         if (!isEnable(lev)) return;
-        tag = "ALog:" + tag;
+        tag = "Log:" + tag;
         switch (lev) {
             case Config.INFO:
                 Log.i(tag, msg);
@@ -46,7 +48,7 @@ class Logger {
 
         writeToFile(lev, tag, msg, throwable);
         if (!isEnable(lev)) return;
-        tag = "ALog:" + tag;
+        tag = "Log:" + tag;
         switch (lev) {
             case Config.INFO:
                 Log.i(tag, msg, throwable);
@@ -72,16 +74,16 @@ class Logger {
         StringBuilder sb = new StringBuilder();
         switch (lev) {
             case Config.INFO:
-                sb.append("(I)");
+                sb.append("I:");
                 break;
             case Config.DEBUG:
-                sb.append("(D)");
+                sb.append("D:");
                 break;
             case Config.WARN:
-                sb.append("(W)");
+                sb.append("W:");
                 break;
             case Config.ERROR:
-                sb.append("(E)");
+                sb.append("E:");
                 break;
         }
         if (logFile != null)

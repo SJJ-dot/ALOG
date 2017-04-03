@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import sjj.alog.ALog;
+import sjj.alog.Log;
 import sjj.alog.Config;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,16 +21,20 @@ public class MainActivity extends AppCompatActivity {
         Config config = new Config();
         config.enable = true;
         config.hold = true;
+        config.holdLev = Config.DEBUG;
+        config.holdMultiple = false;
         Config.init(config);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             List<String> check = PermissionHelper.checkDenied(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (check.size() > 0) {
                 requestPermissions(PermissionHelper.toArray(check), 1);
-                ALog.e("aaa");
-                ALog.e("aaa");
+                Log.e("aaa");
+                Log.i("aaa");
             } else {
-                ALog.e("aaa");
-                ALog.e("aaa");
+                Log.e("aaa");
+                Log.i(1,"aaa");
+                Log.d("aaa");
+                Log.w("aaa");
             }
         }
     }
@@ -41,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 List<String> strings = PermissionHelper.grantFailed(permissions, grantResults);
                 if (strings.size() > 0) {
-                    Toast.makeText(this, "获取权限失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to get permission", Toast.LENGTH_SHORT).show();
                 } else {
-                    ALog.e("aaa");
-                    ALog.e("aaa");
+                    Log.e("aaa");
+                    Log.e("aaa");
                 }
                 break;
             default:

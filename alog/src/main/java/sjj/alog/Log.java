@@ -1,12 +1,10 @@
 package sjj.alog;
 
-import android.util.Log;
-
 /**
  * Created by sjj on 2016-10-11.
  */
 
-public class ALog {
+public class Log {
     private static Logger logger;
     private static Logger get() {
         if (logger == null) {
@@ -20,8 +18,8 @@ public class ALog {
         log(Config.DEBUG, getCallM(), object + "");
     }
 
-    public static void d(int i, Object o) {
-        log(Config.DEBUG, getCallM(i), o + "");
+    public static void d(int sq, Object o) {
+        log(Config.DEBUG, getCallM(sq), o + "");
     }
 
     public static void e(Object object) {
@@ -83,7 +81,7 @@ public class ALog {
         StackTraceElement element = Thread.currentThread().getStackTrace()[4 + sq];
         StringBuilder buf = new StringBuilder();
 
-        buf.append("(tag)").append(element.getMethodName());
+        buf.append(element.getMethodName());
 
         if (element.isNativeMethod()) {
             buf.append("(Native Method)");

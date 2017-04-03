@@ -1,4 +1,4 @@
-package sjj.alog;
+package sjj.alog.file;
 
 import android.util.Log;
 
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * Created by SJJ on 2017/3/5.
  */
 
-class LogFile {
+public class LogFile {
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> schedule;
     private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -92,23 +92,24 @@ class LogFile {
 
     public void push(final String msg) {
         if (writer == null) return;
+        ScheduledFuture<?> schedule = LogFile.this.schedule;
+        if (schedule != null) {
+            schedule.cancel(true);
+        }
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                if (schedule != null) {
-                    schedule.cancel(true);
-                }
                 try {
-                    writer.prepare();
                     writer.write(msg);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    schedule = executorService.schedule(new Runnable() {
+
+                    LogFile.this.schedule = executorService.schedule(new Runnable() {
                         @Override
                         public void run() {
                             writer.close();
-                            schedule = null;
+                            LogFile.this.schedule = null;
                         }
                     }, 10, TimeUnit.SECONDS);
                 }
@@ -116,42 +117,5 @@ class LogFile {
         });
     }
 
-    private static class Writer {
-        private BufferedWriter bufferedWriter;
-        private File file;
-        private SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss -- ");
 
-        private Writer(File file) {
-            if (!file.isFile()) throw new IllegalArgumentException("file 必须是文件类型");
-            this.file = file;
-        }
-
-        void write(String string) throws IOException {
-            bufferedWriter.write(hms.format(new Date(System.currentTimeMillis())));
-            bufferedWriter.write(string);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-
-        }
-
-        synchronized void prepare() throws IOException {
-            if (bufferedWriter == null)
-                bufferedWriter = new BufferedWriter(new FileWriter(file, true));
-        }
-
-        synchronized void close() {
-            if (bufferedWriter == null) return;
-            try {
-                bufferedWriter.flush();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                bufferedWriter.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            bufferedWriter = null;
-        }
-    }
 }
