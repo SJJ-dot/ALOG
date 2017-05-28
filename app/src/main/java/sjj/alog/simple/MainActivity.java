@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         config.hold = true;
         config.holdLev = Config.DEBUG;
         config.holdMultiple = false;
+//        config.dir = getCacheDir();
         Config.init(config);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             List<String> check = PermissionHelper.checkDenied(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);

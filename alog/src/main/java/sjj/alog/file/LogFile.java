@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class LogFile {
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> schedule;
-    private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private SimpleDateFormat ymd = new SimpleDateFormat("MM-dd-HH-mm", Locale.US);
     private Writer writer;
     private File dir;
 
@@ -84,14 +84,20 @@ public class LogFile {
                 boolean newFile = file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e("tag", file.toString());
             }
         }
         return file;
     }
 
-    public void push(final String msg) {
-        if (writer == null) return;
+    public synchronized void push(final String msg) {
+        if (writer == null) {
+            try {
+                writer = new Writer(getLogFile());
+            } catch (Exception e) {
+                return;
+            }
+        }
+
         ScheduledFuture<?> schedule = LogFile.this.schedule;
         if (schedule != null) {
             schedule.cancel(true);
