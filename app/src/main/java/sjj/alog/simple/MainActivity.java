@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         config.enable = true;
         config.hold = true;
         config.holdLev = Config.DEBUG;
-        config.holdMultiple = false;
+        config.holdMultiple = true;
 //        config.dir = getCacheDir();
         Config.init(config);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -55,5 +56,9 @@ public class MainActivity extends AppCompatActivity {
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    public void onClick(View view) {
+        Log.e("日志aaa");
     }
 }

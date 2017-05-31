@@ -24,7 +24,8 @@ import java.util.concurrent.TimeUnit;
 public class LogFile {
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> schedule;
-    private SimpleDateFormat ymd = new SimpleDateFormat("MM-dd-HH-mm", Locale.US);
+    private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private SimpleDateFormat hm = new SimpleDateFormat("HH：mm", Locale.US);
     private Writer writer;
     private File dir;
 
@@ -32,11 +33,7 @@ public class LogFile {
         this.dir = dir;
         deleteOldLogFile();
         if (dir != null) {
-            try {
-                writer = new Writer(getLogFile());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            writer = new Writer(new File(getLogDir(), ymd.format(new Date()) + "/" + hm.format(new Date())));
         }
     }
 
@@ -46,7 +43,7 @@ public class LogFile {
         Set<String> strings = new HashSet<>();
         for (int i = 0; i < 7; i++) {
             instance.add(Calendar.DAY_OF_MONTH, -i);
-            strings.add(getLogFileName(instance.getTime()));
+            strings.add(ymd.format(instance.getTime()));
         }
         File[] oldLogs = dir.listFiles();
         if (oldLogs != null)
@@ -55,16 +52,6 @@ public class LogFile {
                     boolean delete = file.delete();
                 }
             }
-    }
-
-    /**
-     * 根据日期生成log 文件名
-     *
-     * @param date
-     * @return
-     */
-    private String getLogFileName(Date date) {
-        return ymd.format(date) + ".log";
     }
 
     private File getLogDir() {
@@ -77,27 +64,7 @@ public class LogFile {
         return logFileRoot;
     }
 
-    private File getLogFile() {
-        File file = new File(getLogDir(), getLogFileName(new Date()));
-        if (!file.exists()) {
-            try {
-                boolean newFile = file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return file;
-    }
-
     public synchronized void push(final String msg) {
-        if (writer == null) {
-            try {
-                writer = new Writer(getLogFile());
-            } catch (Exception e) {
-                return;
-            }
-        }
-
         ScheduledFuture<?> schedule = LogFile.this.schedule;
         if (schedule != null) {
             schedule.cancel(true);
