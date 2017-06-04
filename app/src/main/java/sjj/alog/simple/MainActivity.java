@@ -2,16 +2,22 @@ package sjj.alog.simple;
 
 import android.Manifest;
 import android.os.Build;
+import android.os.Environment;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.List;
 
 import sjj.alog.Log;
 import sjj.alog.Config;
+import sjj.alog.file.LogFile;
+
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +30,14 @@ public class MainActivity extends AppCompatActivity {
         config.hold = true;
         config.holdLev = Config.DEBUG;
         config.holdMultiple = true;
-//        config.dir = getCacheDir();
+
+//      config.dir = getCacheDir();
+//        config.dirName = "myLog";
+        LogFile logFile = new LogFile(new File(Environment.getExternalStorageDirectory(),"logFile"));
+        logFile.push("logfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfil" +
+                "elogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogf" +
+                "ilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfile");
+
         Config.init(config);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             List<String> check = PermissionHelper.checkDenied(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -59,6 +72,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        Log.e("日志aaa");
+        Log.e("日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志a" +
+                "aa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志a" +
+                "aa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日" +
+                "志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa");
+        Log.e(Environment.getDataDirectory());
+        Log.e(Environment.getRootDirectory());
+        Log.e(Environment.getExternalStorageState());
+        Log.e(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS));
+        Log.e(Environment.getExternalStorageDirectory());
+        Log.e(Environment.getDownloadCacheDirectory());
+
     }
 }

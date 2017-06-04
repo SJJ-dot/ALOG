@@ -46,7 +46,7 @@ class Writer {
         initFile(file);
         if (bufferedWriter == null)
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"));
-        bufferedWriter.write(hms.format(new Date(System.currentTimeMillis())));
+        bufferedWriter.write(hms.format(new Date()));
         bufferedWriter.write(string);
         bufferedWriter.newLine();
         bufferedWriter.flush();

@@ -1,6 +1,7 @@
 package sjj.alog;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import java.io.File;
 
@@ -30,10 +31,14 @@ public class Config {
      * 日志存放目录
      */
     public File dir;
-
+    public String dirName;
     File getDir() {
-        if (dir == null) {
-            dir = Environment.getExternalStorageDirectory();
+        if (dir != null) {
+            return dir;
+        } else if (!TextUtils.isEmpty(dirName)) {
+            dir = new File(Environment.getExternalStorageDirectory(), dirName);
+        } else {
+            dir = new File(Environment.getExternalStorageDirectory(), "log");
         }
         return dir;
     }
@@ -50,6 +55,7 @@ public class Config {
      * 记录所有级别大于 {@link #holdLev} 的log
      */
     public boolean holdMultiple = true;
+    public boolean deleteOldLog = false;
     private static Config defaultConfig;
 
     public static void init(Config config) {

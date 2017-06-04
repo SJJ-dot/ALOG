@@ -31,13 +31,12 @@ public class LogFile {
 
     public LogFile(File dir) {
         this.dir = dir;
-        deleteOldLogFile();
         if (dir != null) {
-            writer = new Writer(new File(getLogDir(), ymd.format(new Date()) + "/" + hm.format(new Date())));
+            writer = new Writer(new File(getLogDir(), ymd.format(new Date()) + "/" + hm.format(new Date())+".log"));
         }
     }
 
-    private void deleteOldLogFile() {
+    public void deleteOldLogFile() {
         File dir = getLogDir();
         Calendar instance = Calendar.getInstance();
         Set<String> strings = new HashSet<>();
@@ -55,8 +54,7 @@ public class LogFile {
     }
 
     private File getLogDir() {
-        File dirRoot = dir;
-        File logFileRoot = new File(dirRoot, "log");
+        File logFileRoot =dir;
         if (logFileRoot.exists() && logFileRoot.isFile()) logFileRoot.delete();
         if (!logFileRoot.exists()) {
             boolean mkdirs = logFileRoot.mkdirs();
@@ -66,7 +64,7 @@ public class LogFile {
 
     public synchronized void push(final String msg) {
         ScheduledFuture<?> schedule = LogFile.this.schedule;
-        if (schedule != null) {
+        if (schedule != null&&!schedule.isDone()) {
             schedule.cancel(true);
         }
         executorService.execute(new Runnable() {

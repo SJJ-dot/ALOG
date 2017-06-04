@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.1.0"
+        versionCode 5
+        versionName "1.1.2"
     }
     buildTypes {
         release {
@@ -19,4 +19,4 @@ android {
 
 dependencies {
 }
-
+//添加

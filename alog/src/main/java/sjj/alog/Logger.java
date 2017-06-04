@@ -15,8 +15,11 @@ class Logger {
 
     Logger(Config config) {
         this.config = config;
-        if (config.hold)
+        if (config.hold) {
             logFile = new LogFile(config.getDir());
+            if (config.deleteOldLog)
+            logFile.deleteOldLogFile();
+        }
     }
 
     private boolean isEnable(int lev) {
