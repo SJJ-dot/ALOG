@@ -17,8 +17,6 @@ import sjj.alog.Log;
 import sjj.alog.Config;
 import sjj.alog.file.LogFile;
 
-import static android.os.Environment.DIRECTORY_DOCUMENTS;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         Log.e(Environment.getDataDirectory());
         Log.e(Environment.getRootDirectory());
         Log.e(Environment.getExternalStorageState());
-        Log.e(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS));
         Log.e(Environment.getExternalStorageDirectory());
         Log.e(Environment.getDownloadCacheDirectory());
 

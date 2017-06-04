@@ -2,6 +2,10 @@ package sjj.alog;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import sjj.alog.file.LogFile;
 
 /**
@@ -12,7 +16,7 @@ class Logger {
 
     private Config config;
     private LogFile logFile;
-
+    private SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss ", Locale.CHINA);
     Logger(Config config) {
         this.config = config;
         if (config.hold) {
@@ -74,7 +78,7 @@ class Logger {
 
     private void writeToFile(int lev, String tag, String msg, Throwable throwable) {
         if (!isHoldLog(lev)) return;
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(hms.format(new Date()));
         switch (lev) {
             case Config.INFO:
                 sb.append("I:");
@@ -90,7 +94,12 @@ class Logger {
                 break;
         }
         if (logFile != null)
-            logFile.push(sb.append(tag).append(":").append(msg).append(throwable(throwable)).toString());
+            logFile.push(sb
+                    .append(tag)
+                    .append("\n")
+                    .append(msg)
+                    .append(throwable(throwable))
+                    .toString());
     }
 
     private String throwable(Throwable throwable) {

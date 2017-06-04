@@ -3,15 +3,8 @@ package sjj.alog.file;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import sjj.alog.Log;
 
 /**
  * Created by SJJ on 2017/4/3.
@@ -21,7 +14,7 @@ import sjj.alog.Log;
 class Writer {
     private BufferedWriter bufferedWriter;
     private File file;
-    private SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss:", Locale.CHINA);
+
 
     Writer(File file) {
         initFile(file);
@@ -46,7 +39,6 @@ class Writer {
         initFile(file);
         if (bufferedWriter == null)
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"));
-        bufferedWriter.write(hms.format(new Date()));
         bufferedWriter.write(string);
         bufferedWriter.newLine();
         bufferedWriter.flush();
