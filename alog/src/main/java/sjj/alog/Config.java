@@ -17,7 +17,7 @@ public class Config {
     /**
      * 是否要输出调用方法
      */
-    public boolean consolePrintMethod = true;
+    public boolean printMethod = true;
     /**
      * log输出控制
      */

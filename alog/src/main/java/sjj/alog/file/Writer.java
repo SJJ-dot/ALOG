@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by SJJ on 2017/4/3.
@@ -37,8 +39,15 @@ class Writer {
 
     synchronized void write(String string) throws IOException {
         initFile(file);
-        if (bufferedWriter == null)
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"));
+        if (bufferedWriter == null) {
+            Charset charset;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                charset = StandardCharsets.UTF_8;
+            } else {
+                charset = Charset.forName("UTF-8");
+            }
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),charset));
+        }
         bufferedWriter.write(string);
         bufferedWriter.newLine();
         bufferedWriter.flush();

@@ -1,25 +1,29 @@
 package sjj.alog;
 
 import android.util.Log;
-import sjj.alog.file.LogFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.util.Calendar;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+import sjj.alog.file.LogFile;
 
 /**
  * Created by SJJ on 2017/3/5.
  */
 
- class LogUtils {
+class LogUtils {
 
     private Config config;
     private LogFile logFile;
     private String lineSeparator = getLineSeparator();
+    private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-     LogUtils(Config config) {
+    LogUtils(Config config) {
         this.config = config;
         if (config.writeToFile) {
             logFile = new LogFile(config.getWriteToFileDir());
@@ -32,28 +36,35 @@ import java.util.Calendar;
         return config.consolePrintEnable && (config.consolePrintMultiple && lev >= config.consolePrintLev || !config.consolePrintMultiple && config.consolePrintLev == lev);
     }
 
-    void l(int lev, String tag, String msg, Throwable throwable) {
-        String s = throwable == null ? msg : (msg + lineSeparator + throwable(throwable));
-        writeToFile(lev, tag, s);
-        if (!isEnable(lev)) return;
-        if (config.consolePrintStackTraceLineNum > 0 && throwable != null) {
-            try {
-                BufferedReader reader = new BufferedReader(new StringReader(s));
-                StringBuilder builder = new StringBuilder();
-                String line;
-                int lineCount = 0;
-                while ((line = reader.readLine()) != null && lineCount <= config.consolePrintStackTraceLineNum) {
-                    builder.append(line);
-                    builder.append(lineSeparator);
-                    lineCount++;
-                    //第一行是 msg 所以多打印一行
+    void l(final int lev, final Logger.CallMethodException method, final String msg, final Throwable throwable) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                String s = throwable == null ? msg : (msg + lineSeparator + throwable(throwable));
+                String methodStr = method == null ? "" : method.getMethod();
+                writeToFile(lev, methodStr, s);
+                if (!isEnable(lev)) return;
+                if (config.consolePrintStackTraceLineNum > 0 && throwable != null) {
+                    try {
+                        BufferedReader reader = new BufferedReader(new StringReader(s));
+                        StringBuilder builder = new StringBuilder();
+                        String line;
+                        int lineCount = 0;
+                        while ((line = reader.readLine()) != null && lineCount <= config.consolePrintStackTraceLineNum) {
+                            builder.append(line);
+                            builder.append(lineSeparator);
+                            lineCount++;
+                            //第一行是 msg 所以多打印一行
+                        }
+                        s = builder.toString();
+                    } catch (IOException ignored) {
+                    }
                 }
-                s = builder.toString();
-            } catch (IOException ignored) {
-            }
-        }
 
-        print(lev, tag, s);
+                print(lev, methodStr, s);
+            }
+        });
+
     }
 
     private void print(int lev, String tag, String s) {
@@ -61,18 +72,19 @@ import java.util.Calendar;
             print(lev, tag, s.substring(0, 3000));
             print(lev, tag, s.substring(3000));
         } else {
+            String tag2 = tag == null ? "" : " ";
             switch (lev) {
                 case Config.INFO:
-                    Log.i(config.tag, tag + " " + s);
+                    Log.i(config.tag, tag2 + s);
                     break;
                 case Config.DEBUG:
-                    Log.d(config.tag, tag + " " + s);
+                    Log.d(config.tag, tag2 + s);
                     break;
                 case Config.WARN:
-                    Log.w(config.tag, tag + " " + s);
+                    Log.w(config.tag, tag2 + s);
                     break;
                 case Config.ERROR:
-                    Log.e(config.tag, tag + " " + s);
+                    Log.e(config.tag, tag2 + s);
                     break;
             }
         }
@@ -87,9 +99,9 @@ import java.util.Calendar;
         Calendar calendar = Calendar.getInstance();
         StringBuilder sb = new StringBuilder();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        sb.append(hour < 10 ? ("0" + hour):hour).append(":");
+        sb.append(hour < 10 ? ("0" + hour) : hour).append(":");
         int min = calendar.get(Calendar.MINUTE);
-        sb.append(min < 10 ? ("0" + min):min).append(":");
+        sb.append(min < 10 ? ("0" + min) : min).append(":");
         int second = calendar.get(Calendar.SECOND);
         sb.append(second < 10 ? ("0" + second) : second).append(".");
         sb.append(calendar.get(Calendar.MILLISECOND)).append(" ");
