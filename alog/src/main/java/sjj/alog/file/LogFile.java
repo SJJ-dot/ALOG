@@ -23,7 +23,7 @@ public class LogFile {
         if (dir != null) {
             SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             SimpleDateFormat hm = new SimpleDateFormat("HH：mm", Locale.getDefault());
-            writer = new Writer(new File(getLogDir(), ymd.format(new Date()) + "/" + hm.format(new Date())+".log"));
+            writer = new Writer(new File(getLogDir(), ymd.format(new Date()) + "/" + hm.format(new Date())+".txt"));
         }
     }
 

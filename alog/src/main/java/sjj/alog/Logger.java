@@ -87,7 +87,7 @@ public class Logger {
     }
 
     private String getCallM() {
-        return config.enableCallMethod ? getCallM(1) : "";
+        return config.consolePrintMethod ? getCallM(1) : "";
     }
 
     private String getCallM(int sq) {

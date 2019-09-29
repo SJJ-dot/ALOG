@@ -21,28 +21,28 @@ import java.util.Calendar;
 
      LogUtils(Config config) {
         this.config = config;
-        if (config.hold) {
-            logFile = new LogFile(config.getDir());
-            if (config.deleteOldLog)
+        if (config.writeToFile) {
+            logFile = new LogFile(config.getWriteToFileDir());
+            if (config.deleteOldLogFile)
                 logFile.deleteOldLogFile();
         }
     }
 
     private boolean isEnable(int lev) {
-        return config.enable && (config.multiple && lev >= config.lev || !config.multiple && config.lev == lev);
+        return config.consolePrintEnable && (config.consolePrintMultiple && lev >= config.consolePrintLev || !config.consolePrintMultiple && config.consolePrintLev == lev);
     }
 
     void l(int lev, String tag, String msg, Throwable throwable) {
         String s = throwable == null ? msg : (msg + lineSeparator + throwable(throwable));
         writeToFile(lev, tag, s);
         if (!isEnable(lev)) return;
-        if (config.stackTraceLineNum > 0 && throwable != null) {
+        if (config.consolePrintStackTraceLineNum > 0 && throwable != null) {
             try {
                 BufferedReader reader = new BufferedReader(new StringReader(s));
                 StringBuilder builder = new StringBuilder();
                 String line;
                 int lineCount = 0;
-                while ((line = reader.readLine()) != null && lineCount <= config.stackTraceLineNum) {
+                while ((line = reader.readLine()) != null && lineCount <= config.consolePrintStackTraceLineNum) {
                     builder.append(line);
                     builder.append(lineSeparator);
                     lineCount++;
@@ -57,7 +57,7 @@ import java.util.Calendar;
     }
 
     private void print(int lev, String tag, String s) {
-        if (config.printAllLog && s.length() > 3500) {
+        if (config.consolePrintAllLog && s.length() > 3500) {
             print(lev, tag, s.substring(0, 3000));
             print(lev, tag, s.substring(3000));
         } else {
@@ -79,7 +79,7 @@ import java.util.Calendar;
     }
 
     private boolean isHoldLog(int lev) {
-        return config.hold && (lev >= config.holdLev && config.holdMultiple || !config.holdMultiple && lev == config.holdLev);
+        return config.writeToFile && (lev >= config.writeToFileLev && config.writeToFileMultiple || !config.writeToFileMultiple && lev == config.writeToFileLev);
     }
 
     private void writeToFile(int lev, String tag, String msg) {
