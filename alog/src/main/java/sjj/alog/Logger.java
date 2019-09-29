@@ -1,119 +1,121 @@
 package sjj.alog;
 
-import android.util.Log;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import sjj.alog.file.LogFile;
-
 /**
- * Created by SJJ on 2017/3/5.
+ * Created by sjj on 2016-10-11.
  */
 
-class Logger {
-
+public class Logger {
+    private final LogUtils logUtils;
     private Config config;
-    private LogFile logFile;
-    private SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss ", Locale.CHINA);
-    Logger(Config config) {
+
+    public Logger(Config config) {
+        this.logUtils = new LogUtils(config);
         this.config = config;
-        if (config.hold) {
-            logFile = new LogFile(config.getDir());
-            if (config.deleteOldLog)
-            logFile.deleteOldLogFile();
-        }
     }
 
-    private boolean isEnable(int lev) {
-        return config.enable && (config.multiple && lev >= config.lev || !config.multiple && config.lev == lev);
+    //================debug=======================
+    public void d(Object object) {
+        log(Config.DEBUG, getCallM(), String.valueOf(object), null);
     }
 
-    void l(int lev, String tag, String msg) {
-        writeToFile(lev, tag, msg, null);
-        if (!isEnable(lev)) return;
-        tag = "Log:" + tag;
-        switch (lev) {
-            case Config.INFO:
-                Log.i(tag, msg);
-                break;
-            case Config.DEBUG:
-                Log.d(tag, msg);
-                break;
-            case Config.WARN:
-                Log.w(tag, msg);
-                break;
-            case Config.ERROR:
-                Log.e(tag, msg);
-                break;
-        }
-
+    public void d(Object object, Throwable throwable) {
+        log(Config.DEBUG, getCallM(), String.valueOf(object), throwable);
     }
 
-    void l(int lev, String tag, String msg, Throwable throwable) {
-
-        writeToFile(lev, tag, msg, throwable);
-        if (!isEnable(lev)) return;
-        tag = "Log:" + tag;
-        switch (lev) {
-            case Config.INFO:
-                Log.i(tag, msg, throwable);
-                break;
-            case Config.DEBUG:
-                Log.d(tag, msg, throwable);
-                break;
-            case Config.WARN:
-                Log.w(tag, msg, throwable);
-                break;
-            case Config.ERROR:
-                Log.e(tag, msg, throwable);
-                break;
-        }
+    public void d(int sq, Object object) {
+        log(Config.DEBUG, getCallM(sq), String.valueOf(object), null);
     }
 
-    private boolean isHoldLog(int lev) {
-        return config.hold && (lev >= config.holdLev && config.holdMultiple || !config.holdMultiple && lev == config.holdLev);
+    public void d(int sq, Object object, Throwable throwable) {
+        log(Config.DEBUG, getCallM(sq), String.valueOf(object), throwable);
     }
 
-    private void writeToFile(int lev, String tag, String msg, Throwable throwable) {
-        if (!isHoldLog(lev)) return;
-        StringBuilder sb = new StringBuilder(hms.format(new Date()));
-        switch (lev) {
-            case Config.INFO:
-                sb.append("I:");
-                break;
-            case Config.DEBUG:
-                sb.append("D:");
-                break;
-            case Config.WARN:
-                sb.append("W:");
-                break;
-            case Config.ERROR:
-                sb.append("E:");
-                break;
-        }
-        if (logFile != null)
-            logFile.push(sb
-                    .append(tag)
-                    .append("\n")
-                    .append(msg)
-                    .append(throwable(throwable))
-                    .toString());
+    //===============info================
+    public void i(Object object) {
+        log(Config.INFO, getCallM(), String.valueOf(object), null);
     }
 
-    private String throwable(Throwable throwable) {
-        if (throwable == null) return "";
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(throwable.getClass()).append(", ").append(throwable.getMessage()).append("\n");
-        while (throwable != null) {
-            for (StackTraceElement element : throwable.getStackTrace()) {
-                buffer.append(element.toString()).append("\n");
+    public void i(Object object, Throwable throwable) {
+        log(Config.INFO, getCallM(), String.valueOf(object), throwable);
+    }
+
+    public void i(int sq, Object object) {
+        log(Config.INFO, getCallM(sq), String.valueOf(object), null);
+    }
+
+    public void i(int sq, Object object, Throwable throwable) {
+        log(Config.INFO, getCallM(sq), String.valueOf(object), throwable);
+    }
+
+    //===============WARN================
+    public void w(Object object) {
+        log(Config.WARN, getCallM(), String.valueOf(object), null);
+    }
+
+    public void w(Object object, Throwable throwable) {
+        log(Config.WARN, getCallM(), String.valueOf(object), throwable);
+    }
+
+    public void w(int sq, Object object) {
+        log(Config.WARN, getCallM(sq), String.valueOf(object), null);
+    }
+
+    public void w(int sq, Object object, Throwable throwable) {
+        log(Config.WARN, getCallM(sq), String.valueOf(object), throwable);
+    }
+
+    //===============ERROR================
+    public void e(Object object) {
+        log(Config.ERROR, getCallM(), String.valueOf(object), null);
+    }
+
+    public void e(Object object, Throwable throwable) {
+        log(Config.ERROR, getCallM(), String.valueOf(object), throwable);
+    }
+
+    public void e(int sq, Object object) {
+        log(Config.ERROR, getCallM(sq), String.valueOf(object), null);
+    }
+
+    public void e(int sq, Object object, Throwable throwable) {
+        log(Config.ERROR, getCallM(sq), String.valueOf(object), throwable);
+    }
+
+    //===========================utils=========================
+    private void log(int lev, String tag, String message, Throwable throwable) {
+        logUtils.l(lev, tag, message, throwable);
+    }
+
+    private String getCallM() {
+        return config.enableCallMethod ? getCallM(1) : "";
+    }
+
+    private String getCallM(int sq) {
+        StackTraceElement element = Thread.currentThread().getStackTrace()[4 + sq];
+        StringBuilder buf = new StringBuilder();
+
+        buf.append(element.getMethodName());
+
+        if (element.isNativeMethod()) {
+            buf.append("(Native Method)");
+        } else {
+            String fName = element.getFileName();
+
+            if (fName == null) {
+                buf.append("(Unknown Source)");
+            } else {
+                int lineNum = element.getLineNumber();
+
+                buf.append('(');
+                buf.append(fName);
+                if (lineNum >= 0) {
+                    buf.append(':');
+                    buf.append(lineNum);
+                }
+                buf.append(')');
             }
-            throwable = throwable.getCause();
-            if (throwable != null)
-                buffer.append("caused by ");
         }
-        return buffer.toString();
+
+        return buf.toString();
     }
 }

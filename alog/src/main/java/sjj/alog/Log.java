@@ -1,108 +1,87 @@
 package sjj.alog;
 
-/**
- * Created by sjj on 2016-10-11.
- */
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Log {
-    private static Logger logger;
+    private static final AtomicReference<Logger> logger = new AtomicReference<>();
+
     private static Logger get() {
-        if (logger == null) {
-            logger = new Logger(Config.getDefaultConfig());
+        //凭感觉这么写的 没有道理
+        if (logger.get() == null) {
+            synchronized (logger) {
+                if (logger.get() == null) {
+                    logger.set(new Logger(Config.getDefaultConfig()));
+                }
+            }
         }
-        return logger;
+        return logger.get();
     }
 
-
+    //================debug=======================
     public static void d(Object object) {
-        log(Config.DEBUG, getCallM(), object + "");
+        get().d(1, object);
     }
 
-    public static void d(int sq, Object o) {
-        log(Config.DEBUG, getCallM(sq), o + "");
+    public static void d(Object object, Throwable throwable) {
+        get().d(1, object, throwable);
     }
 
-    public static void e(Object object) {
-        log(Config.ERROR, getCallM(), object + "");
-    }
-    public static void e(int sq,Object object) {
-        log(Config.ERROR, getCallM(sq), object + "");
-    }
-    public static void e(Object object, Throwable throwable) {
-        log(Config.ERROR, getCallM(), object + "", throwable);
+    public static void d(int sq, Object object) {
+        get().d(1 + sq, object);
     }
 
-    public static void e(int sq, Object object, Throwable throwable) {
-        log(Config.ERROR, getCallM(sq), object + "", throwable);
+    public static void d(int sq, Object object, Throwable throwable) {
+        get().d(1 + sq, object, throwable);
     }
 
+    //===============info================
     public static void i(Object object) {
-        log(Config.INFO, getCallM(), object + "");
+        get().i(1, object);
     }
 
     public static void i(Object object, Throwable throwable) {
-        log(Config.INFO, getCallM(), object + "", throwable);
+        get().i(1, object, throwable);
     }
 
     public static void i(int sq, Object object) {
-        log(Config.INFO, getCallM(sq), object + "");
-
+        get().i(1 + sq, object);
     }
 
-    public static void w(int sq, Object object, Throwable throwable) {
-        log(Config.WARN, getCallM(sq), object + "", throwable);
+    public static void i(int sq, Object object, Throwable throwable) {
+        get().i(1 + sq, object, throwable);
+    }
+
+    //===============WARN================
+    public static void w(Object object) {
+        get().w(1, object);
     }
 
     public static void w(Object object, Throwable throwable) {
-        log(Config.WARN, getCallM(), object + "", throwable);
+        get().w(1, object, throwable);
     }
 
     public static void w(int sq, Object object) {
-        log(Config.WARN, getCallM(sq), object + "");
+        get().w(1 + sq, object);
     }
 
-    public static void w(Object object) {
-        log(Config.WARN, getCallM(), object + "");
+    public static void w(int sq, Object object, Throwable throwable) {
+        get().w(1 + sq, object, throwable);
     }
 
-    private static void log(int lev, String tag, String message) {
-        get().l(lev,tag,message);
+    //===============ERROR================
+    public static void e(Object object) {
+        get().e(1, object);
     }
 
-    private static void log(int lev, String tag, String message, Throwable throwable) {
-        get().l(lev, tag, message, throwable);
+    public static void e(Object object, Throwable throwable) {
+        get().e(1, object, throwable);
     }
 
-    private static String getCallM() {
-        return getCallM(1);
+    public static void e(int sq, Object object) {
+        get().e(1 + sq, object);
     }
 
-    private static String getCallM(int sq) {
-        StackTraceElement element = Thread.currentThread().getStackTrace()[4 + sq];
-        StringBuilder buf = new StringBuilder();
-
-        buf.append(element.getMethodName());
-
-        if (element.isNativeMethod()) {
-            buf.append("(Native Method)");
-        } else {
-            String fName = element.getFileName();
-
-            if (fName == null) {
-                buf.append("(Unknown Source)");
-            } else {
-                int lineNum = element.getLineNumber();
-
-                buf.append('(');
-                buf.append(fName);
-                if (lineNum >= 0) {
-                    buf.append(':');
-                    buf.append(lineNum);
-                }
-                buf.append(')');
-            }
-        }
-
-        return buf.toString();
+    public static void e(int sq, Object object, Throwable throwable) {
+        get().e(1 + sq, object, throwable);
     }
 }

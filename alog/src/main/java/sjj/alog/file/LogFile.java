@@ -1,17 +1,8 @@
 package sjj.alog.file;
 
-import android.util.Log;
-
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -24,14 +15,14 @@ import java.util.concurrent.TimeUnit;
 public class LogFile {
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> schedule;
-    private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-    private SimpleDateFormat hm = new SimpleDateFormat("HH：mm", Locale.US);
     private Writer writer;
     private File dir;
 
     public LogFile(File dir) {
         this.dir = dir;
         if (dir != null) {
+            SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat hm = new SimpleDateFormat("HH：mm", Locale.getDefault());
             writer = new Writer(new File(getLogDir(), ymd.format(new Date()) + "/" + hm.format(new Date())+".log"));
         }
     }
@@ -40,6 +31,7 @@ public class LogFile {
         File dir = getLogDir();
         Calendar instance = Calendar.getInstance();
         Set<String> strings = new HashSet<>();
+        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         for (int i = 0; i < 7; i++) {
             instance.add(Calendar.DAY_OF_MONTH, -i);
             strings.add(ymd.format(instance.getTime()));

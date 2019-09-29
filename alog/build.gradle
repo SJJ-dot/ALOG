@@ -1,13 +1,11 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'//添加
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 25
-        versionCode 6
-        versionName "1.1.3"
+        targetSdkVersion 28
     }
     buildTypes {
         release {
@@ -19,4 +17,14 @@ android {
 
 dependencies {
 }
-//添加
+//上传
+publish {
+    userOrg = 'sjianjun'
+    groupId = 'com.sjianjun'
+    artifactId = 'aLog'
+    publishVersion = '1.2.2'
+    desc = 'Android log 日志输出小工具。支持写入文件'
+    website = 'https://github.com/lTBeL/ALOG'
+    //   打包上传         .\gradlew clean build bintrayUpload -PbintrayUser=sjianjun -PbintrayKey=xxx -PdryRun=false
+
+}
