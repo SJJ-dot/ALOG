@@ -1,21 +1,15 @@
 package sjj.alog.simple;
 
-import android.Manifest;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
-import java.util.List;
 
-import sjj.alog.Log;
 import sjj.alog.Config;
-import sjj.alog.file.LogFile;
+import sjj.alog.Log;
+import sjj.alog.Logger;
+
+import static sjj.alog.Config.ERROR;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,62 +17,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        printLog();
+        privateConfig();
+    }
+
+    public void printLog() {
+
+        Config config = Config.getDefaultConfig();
+        config.tag = "def global config";
+
+        Log.i("log");
+        //输出：2019-09-29 16:52:36.035 10325-10325/sjj.alog.simple I/def global config: printLog(MainActivity.java:30) log
+
+        Log.i(1, "log");
+        //输出：2019-09-29 16:52:36.035 10325-10325/sjj.alog.simple I/def global config: onCreate(MainActivity.java:21) log
+
+    }
+
+    public void privateConfig() {
+        // 如果写入存储卡需要 WRITE_EXTERNAL_STORAGE
         Config config = new Config();
-        config.enable = true;
+        //保存到文件 更多配置查看 Config 类
         config.hold = true;
-        config.holdLev = Config.DEBUG;
-        config.holdMultiple = true;
-
-//      config.dir = getCacheDir();
-//        config.dirName = "myLog";
-        LogFile logFile = new LogFile(new File(Environment.getExternalStorageDirectory(),"logFile"));
-        logFile.push("logfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfil" +
-                "elogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogf" +
-                "ilelogfilelogfilelogfilelogfilelogfilelogfilelogfilelogfile");
-
-        Config.init(config);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            List<String> check = PermissionHelper.checkDenied(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (check.size() > 0) {
-                requestPermissions(PermissionHelper.toArray(check), 1);
-                Log.e("aaa");
-                Log.i("aaa");
-            } else {
-                Log.e("aaa");
-                Log.i(1,"aaa");
-                Log.d("aaa");
-                Log.w("aaa");
-            }
-        }
+        config.dir = new File(getExternalCacheDir(), "LogFile");
+        config.holdLev = ERROR;
+        //只保存指定级别日志
+        config.holdMultiple = false;
+        Logger logger = new Logger(config);
+        logger.e("write file");
+        //输出：2019-09-29 16:52:36.049 10325-10325/sjj.alog.simple E/Logger: privateConfig(MainActivity.java:48) write file
+        logger.i("小于指定级别的日志不会写入文件");
+        //输出：2019-09-29 16:52:36.049 10325-10325/sjj.alog.simple I/Logger: privateConfig(MainActivity.java:50) 小于指定级别的日志不会写入文件
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                List<String> strings = PermissionHelper.grantFailed(permissions, grantResults);
-                if (strings.size() > 0) {
-                    Toast.makeText(this, "Failed to get permission", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("aaa");
-                    Log.e("aaa");
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-    public void onClick(View view) {
-        Log.e("日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志a" +
-                "aa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志a" +
-                "aa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日" +
-                "志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa日志aaa");
-        Log.e(Environment.getDataDirectory());
-        Log.e(Environment.getRootDirectory());
-        Log.e(Environment.getExternalStorageState());
-        Log.e(Environment.getExternalStorageDirectory());
-        Log.e(Environment.getDownloadCacheDirectory());
-
-    }
 }
