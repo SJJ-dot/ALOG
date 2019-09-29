@@ -82,40 +82,53 @@ public class Logger {
     }
 
     //===========================utils=========================
-    private void log(int lev, String tag, String message, Throwable throwable) {
-        logUtils.l(lev, tag, message, throwable);
+    private void log(int lev, CallMethodException method, String message, Throwable throwable) {
+        logUtils.l(lev, method, message, throwable);
     }
 
-    private String getCallM() {
-        return config.consolePrintMethod ? getCallM(1) : "";
+    private CallMethodException getCallM() {
+        return getCallM(1);
     }
 
-    private String getCallM(int sq) {
-        StackTraceElement element = Thread.currentThread().getStackTrace()[4 + sq];
-        StringBuilder buf = new StringBuilder();
+    private CallMethodException getCallM(int sq) {
+        return config.printMethod ? new CallMethodException(sq) : null;
+    }
 
-        buf.append(element.getMethodName());
+    class CallMethodException extends Exception {
+        private int sq;
 
-        if (element.isNativeMethod()) {
-            buf.append("(Native Method)");
-        } else {
-            String fName = element.getFileName();
-
-            if (fName == null) {
-                buf.append("(Unknown Source)");
-            } else {
-                int lineNum = element.getLineNumber();
-
-                buf.append('(');
-                buf.append(fName);
-                if (lineNum >= 0) {
-                    buf.append(':');
-                    buf.append(lineNum);
-                }
-                buf.append(')');
-            }
+        public CallMethodException(int sq) {
+            this.sq = sq;
         }
 
-        return buf.toString();
+        public String getMethod() {
+            StackTraceElement element = getStackTrace()[2 + sq];
+            StringBuilder buf = new StringBuilder();
+
+            buf.append(element.getMethodName());
+
+            if (element.isNativeMethod()) {
+                buf.append("(Native Method)");
+            } else {
+                String fName = element.getFileName();
+
+                if (fName == null) {
+                    buf.append("(Unknown Source)");
+                } else {
+                    int lineNum = element.getLineNumber();
+
+                    buf.append('(');
+                    buf.append(fName);
+                    if (lineNum >= 0) {
+                        buf.append(':');
+                        buf.append(lineNum);
+                    }
+                    buf.append(')');
+                }
+            }
+            return buf.toString();
+        }
     }
+
+
 }

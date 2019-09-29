@@ -22,20 +22,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PermissionUtil.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
-            @Override
-            public void onGranted(Permission permissions) {
-                printLog();
-                privateConfig();
-            }
+//        PermissionUtil.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
+//            @Override
+//            public void onGranted(Permission permissions) {
+//                printLog();
+////                privateConfig();
+//            }
+//
+//            @Override
+//            public void onDenied(Permission permissions) {
+//
+//            }
+//        });
 
-            @Override
-            public void onDenied(Permission permissions) {
-
-            }
-        });
-
-
+        printLog();
+//        privateConfig();
 
     }
 
@@ -46,11 +47,9 @@ public class MainActivity extends AppCompatActivity {
         config.tag = "def global config";
 
         Log.i("log");
-        //输出：2019-09-29 16:52:36.035 10325-10325/sjj.alog.simple I/def global config: printLog(MainActivity.java:30) log
-
+        Log.i("log", new Exception());
         Log.i(1, "log");
-        //输出：2019-09-29 16:52:36.035 10325-10325/sjj.alog.simple I/def global config: onCreate(MainActivity.java:21) log
-
+        Log.i(1, "log", new Exception());
     }
 
     public void privateConfig() {
@@ -65,11 +64,6 @@ public class MainActivity extends AppCompatActivity {
         Logger logger = new Logger(config);
         logger.e("write file");
         //输出：2019-09-29 16:52:36.049 10325-10325/sjj.alog.simple E/Logger: privateConfig(MainActivity.java:48) write file
-        logger.e("小于指定级别的日志不会写入文件");
-        logger.e("小于指定级别的日志不会写入文件");
-        logger.e("小于指定级别的日志不会写入文件");
-        logger.e("小于指定级别的日志不会写入文件");
-        logger.e("小于指定级别的日志不会写入文件");
         logger.e("小于指定级别的日志不会写入文件");
         //输出：2019-09-29 16:52:36.049 10325-10325/sjj.alog.simple I/Logger: privateConfig(MainActivity.java:50) 小于指定级别的日志不会写入文件
     }
