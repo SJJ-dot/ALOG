@@ -1,6 +1,5 @@
 package sjj.alog.simple;
 
-import android.Manifest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -9,9 +8,6 @@ import java.io.File;
 import sjj.alog.Config;
 import sjj.alog.Log;
 import sjj.alog.Logger;
-import sjj.permission.PermissionCallback;
-import sjj.permission.model.Permission;
-import sjj.permission.util.PermissionUtil;
 
 import static sjj.alog.Config.ERROR;
 
@@ -43,13 +39,28 @@ public class MainActivity extends AppCompatActivity {
     public void printLog() {
 
         Config config = Config.getDefaultConfig();
-        config.writeToFile = true;
+        config.printMethod = false;
         config.tag = "def global config";
 
         Log.i("log");
         Log.i("log", new Exception());
         Log.i(1, "log");
         Log.i(1, "log", new Exception());
+
+        Log.d("log");
+        Log.d("log", new Exception());
+        Log.d(1, "log");
+        Log.d(1, "log", new Exception());
+
+        Log.w("log");
+        Log.w("log", new Exception());
+        Log.w(1, "log");
+        Log.w(1, "log", new Exception());
+
+        Log.e("log");
+        Log.e("log", new Exception());
+        Log.e(1, "log");
+        Log.e(1, "log", new Exception());
     }
 
     public void privateConfig() {

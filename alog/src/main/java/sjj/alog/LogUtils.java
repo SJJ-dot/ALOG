@@ -1,5 +1,6 @@
 package sjj.alog;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -72,7 +73,7 @@ class LogUtils {
             print(lev, tag, s.substring(0, 3000));
             print(lev, tag, s.substring(3000));
         } else {
-            String tag2 = tag == null ? "" : (tag + " ");
+            String tag2 = TextUtils.isEmpty(tag) ? "" : (tag + " ");
             switch (lev) {
                 case Config.INFO:
                     Log.i(config.tag, tag2 + s);
