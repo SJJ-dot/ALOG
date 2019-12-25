@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import sjj.alog.file.LogFile;
 
@@ -22,7 +22,7 @@ class LogUtils {
     private Config config;
     private LogFile logFile;
     private String lineSeparator = getLineSeparator();
-    private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     LogUtils(Config config) {
         this.config = config;
