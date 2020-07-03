@@ -3,6 +3,9 @@
 buildscript {
     repositories {
         maven {
+            url "https://raw.githubusercontent.com/SJJ-dot/repo/master/repository"
+        }
+        maven {
             url 'https://maven.google.com/'
             name 'Google'
         }
@@ -19,6 +22,9 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url "https://raw.githubusercontent.com/SJJ-dot/repo/master/"
+        }
         maven {
             url 'https://maven.google.com/'
             name 'Google'

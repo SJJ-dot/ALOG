@@ -1,6 +1,7 @@
 package sjj.alog;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -80,13 +81,14 @@ public class Config implements Cloneable {
      * 日志存放目录
      */
     public File writeToFileDir;
-    public String writeToFileDirName = tag;
+    public String writeToFileDirName;
 
     public File getWriteToFileDir() {
         if (writeToFileDir != null) {
             return writeToFileDir;
         } else {
-            writeToFileDir = new File(Environment.getExternalStorageDirectory(), "ALog/" + writeToFileDirName);
+            String fileName = TextUtils.isEmpty(writeToFileDirName) ? tag : writeToFileDirName;
+            writeToFileDir = new File(Environment.getExternalStorageDirectory(), "ALog/" + fileName);
         }
         return writeToFileDir;
     }

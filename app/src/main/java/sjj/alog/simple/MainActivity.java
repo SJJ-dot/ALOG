@@ -1,14 +1,22 @@
 package sjj.alog.simple;
 
+import android.Manifest;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.sjianjun.permission.PermissionCallback;
+import com.sjianjun.permission.model.Permission;
+import com.sjianjun.permission.util.PermissionUtil;
+
 import java.io.File;
+import java.util.List;
 
 import sjj.alog.Config;
 import sjj.alog.Log;
 import sjj.alog.Logger;
 
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
 import static sjj.alog.Config.ERROR;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,29 +26,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        PermissionUtil.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
-//            @Override
-//            public void onGranted(Permission permissions) {
-//                printLog();
-////                privateConfig();
-//            }
-//
-//            @Override
-//            public void onDenied(Permission permissions) {
-//
-//            }
-//        });
+        PermissionUtil.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
+            @Override
+            public void onRequestPermissionsResult(List<Permission> permissions) {
 
-        printLog();
-        Log.e("=================================");
-        privateConfig();
-        Log.e("=================================");
-        Log.tag("hello").e("test tag ");
+                printLog();
+                Log.e("=================================");
+                privateConfig();
+                Log.e("=================================");
+                Log.tag("hello").e("test tag ");
+            }
+        });
+
+
     }
 
     public void printLog() {
 
         Config config = Config.getDefaultConfig();
+        config.writeToFile = true;
         config.printMethod = true;
         config.tag = "def global config";
 
