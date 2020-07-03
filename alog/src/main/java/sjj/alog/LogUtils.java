@@ -9,7 +9,6 @@ import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import sjj.alog.file.LogFile;
 
@@ -22,12 +21,13 @@ class LogUtils {
     private Config config;
     private LogFile logFile;
     private String lineSeparator = getLineSeparator();
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ExecutorService executorService;
 
     LogUtils(Config config) {
         this.config = config;
+        executorService = config.getLogExecutorService();
         if (config.writeToFile) {
-            logFile = new LogFile(config.getWriteToFileDir());
+            logFile = new LogFile(config);
             if (config.deleteOldLogFile)
                 logFile.deleteOldLogFile();
         }

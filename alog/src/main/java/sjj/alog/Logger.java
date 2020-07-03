@@ -94,7 +94,7 @@ public class Logger {
         return config.printMethod ? new CallMethodException(sq) : null;
     }
 
-    class CallMethodException extends Exception {
+    static class CallMethodException extends Exception {
         private int sq;
 
         public CallMethodException(int sq) {

@@ -3,12 +3,15 @@ package sjj.alog;
 import android.os.Environment;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by SJJ on 2017/3/5.
  */
 
-public class Config {
+public class Config implements Cloneable {
     public static final int ALL = 0;
     public static final int DEBUG = 1;
     public static final int INFO = 2;
@@ -46,20 +49,19 @@ public class Config {
      */
     public String tag = "Logger";
 
-    /**
-     * 日志存放目录
-     */
-    public File writeToFileDir;
-    public String writeToFileDirName = "log";
+    public ExecutorService logExecutorService;
 
-    File getWriteToFileDir() {
-        if (writeToFileDir != null) {
-            return writeToFileDir;
-        } else {
-            writeToFileDir = new File(Environment.getExternalStorageDirectory(), writeToFileDirName);
+    public synchronized ExecutorService getLogExecutorService() {
+        if (logExecutorService == null) {
+            if (this == getDefaultConfig()) {
+                logExecutorService = Executors.newSingleThreadExecutor();
+            } else {
+                logExecutorService = getDefaultConfig().getLogExecutorService();
+            }
         }
-        return writeToFileDir;
+        return logExecutorService;
     }
+
 
     /**
      * 是否保存日志
@@ -74,7 +76,44 @@ public class Config {
      */
     public boolean writeToFileMultiple = true;
     public boolean deleteOldLogFile = false;
-    private static Config defaultConfig;
+    /**
+     * 日志存放目录
+     */
+    public File writeToFileDir;
+    public String writeToFileDirName = tag;
+
+    public File getWriteToFileDir() {
+        if (writeToFileDir != null) {
+            return writeToFileDir;
+        } else {
+            writeToFileDir = new File(Environment.getExternalStorageDirectory(), "ALog/" + writeToFileDirName);
+        }
+        return writeToFileDir;
+    }
+
+    public ScheduledExecutorService logFileExecutorService;
+
+    public synchronized ScheduledExecutorService getLogFileExecutorService() {
+        if (logFileExecutorService == null) {
+            if (this == getDefaultConfig()) {
+                logFileExecutorService = Executors.newSingleThreadScheduledExecutor();
+            } else {
+                logFileExecutorService = getDefaultConfig().getLogFileExecutorService();
+            }
+        }
+        return logFileExecutorService;
+    }
+
+    @Override
+    public Config clone() {
+        try {
+            return (Config) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return new Config();
+        }
+    }
+
+    public static Config defaultConfig;
 
     public static void init(Config config) {
         defaultConfig = config;

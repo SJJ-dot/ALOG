@@ -1,8 +1,11 @@
 package sjj.alog;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Log {
+    private static final ConcurrentHashMap<String, Logger> loggerMap = new ConcurrentHashMap<>();
+
     private static final AtomicReference<Logger> logger = new AtomicReference<>();
 
     private static Logger get() {
@@ -15,6 +18,20 @@ public class Log {
             }
         }
         return logger.get();
+    }
+
+    public static Logger tag(String tag) {
+        Config config = Config.getDefaultConfig().clone();
+        config.tag = tag;
+        return tag(tag, config);
+    }
+
+    public static Logger tag(String tag, Config config) {
+        Logger logger = loggerMap.get(tag);
+        if (logger == null) {
+            loggerMap.put(tag, new Logger(config));
+        }
+        return loggerMap.get(tag);
     }
 
     //================debug=======================

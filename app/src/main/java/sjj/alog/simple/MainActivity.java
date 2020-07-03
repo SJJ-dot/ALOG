@@ -32,14 +32,16 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         printLog();
-//        privateConfig();
-
+        Log.e("=================================");
+        privateConfig();
+        Log.e("=================================");
+        Log.tag("hello").e("test tag ");
     }
 
     public void printLog() {
 
         Config config = Config.getDefaultConfig();
-        config.printMethod = false;
+        config.printMethod = true;
         config.tag = "def global config";
 
         Log.i("log");
