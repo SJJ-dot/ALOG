@@ -4,11 +4,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Log {
-    private static final ConcurrentHashMap<String, Logger> loggerMap = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, Logger> loggerMap = new ConcurrentHashMap<>();
 
-    private static final AtomicReference<Logger> logger = new AtomicReference<>();
+    public static final AtomicReference<Logger> logger = new AtomicReference<>();
 
-    private static Logger get() {
+    public static Logger get() {
         //凭感觉这么写的 没有道理
         if (logger.get() == null) {
             synchronized (logger) {

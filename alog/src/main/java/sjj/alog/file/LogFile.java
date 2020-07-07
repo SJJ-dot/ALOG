@@ -18,10 +18,10 @@ import sjj.alog.Config;
  */
 
 public class LogFile {
-    private ScheduledExecutorService executorService;
-    private ScheduledFuture<?> schedule;
-    private Writer writer;
-    private File dir;
+    public ScheduledExecutorService executorService;
+    public ScheduledFuture<?> schedule;
+    public Writer writer;
+    public File dir;
 
     public LogFile(Config config) {
         executorService = config.getLogFileExecutorService();

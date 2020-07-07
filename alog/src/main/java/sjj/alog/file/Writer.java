@@ -14,8 +14,8 @@ import java.nio.charset.StandardCharsets;
  */
 
 class Writer {
-    private BufferedWriter bufferedWriter;
-    private File file;
+    public BufferedWriter bufferedWriter;
+    public File file;
 
 
     Writer(File file) {

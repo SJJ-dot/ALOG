@@ -18,10 +18,10 @@ import sjj.alog.file.LogFile;
 
 class LogUtils {
 
-    private Config config;
-    private LogFile logFile;
-    private String lineSeparator = getLineSeparator();
-    private ExecutorService executorService;
+    public Config config;
+    public LogFile logFile;
+    public String lineSeparator = getLineSeparator();
+    public ExecutorService executorService;
 
     LogUtils(Config config) {
         this.config = config;

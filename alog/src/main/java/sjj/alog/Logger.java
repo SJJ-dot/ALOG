@@ -5,8 +5,8 @@ package sjj.alog;
  */
 
 public class Logger {
-    private final LogUtils logUtils;
-    private Config config;
+    public final LogUtils logUtils;
+    public Config config;
 
     public Logger(Config config) {
         this.logUtils = new LogUtils(config);
