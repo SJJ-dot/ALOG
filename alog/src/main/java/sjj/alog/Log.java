@@ -1,10 +1,13 @@
 package sjj.alog;
 
+import android.text.TextUtils;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Log {
     public static final ConcurrentHashMap<String, Logger> loggerMap = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, Config> configMap = new ConcurrentHashMap<>();
 
     public static final AtomicReference<Logger> logger = new AtomicReference<>();
 
@@ -21,7 +24,14 @@ public class Log {
     }
 
     public static Logger tag(String tag) {
-        Config config = Config.getDefaultConfig().clone();
+        if (TextUtils.isEmpty(tag)) {
+            return get();
+        }
+        Config config = configMap.get(tag);
+        if (config == null) {
+            configMap.put(tag, Config.getDefaultConfig().clone());
+            config = configMap.get(tag);
+        }
         config.tag = tag;
         return tag(tag, config);
     }

@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ALOG.iml" filepath="$PROJECT_DIR$/ALOG.iml" />
-      <module fileurl="file://$PROJECT_DIR$/alog/ALOG-alog.iml" filepath="$PROJECT_DIR$/alog/ALOG-alog.iml" group="ALOG/alog" />
-      <module fileurl="file://$PROJECT_DIR$/app/ALOG-app.iml" filepath="$PROJECT_DIR$/app/ALOG-app.iml" group="ALOG/app" />
-      <module fileurl="file://$PROJECT_DIR$/alog/alog.iml" filepath="$PROJECT_DIR$/alog/alog.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/github-ALOG.iml" filepath="$PROJECT_DIR$/github-ALOG.iml" group="ALOG" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ALOG.iml" filepath="$PROJECT_DIR$/.idea/ALOG.iml" group="ALOG" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/alog/alog.iml" filepath="$PROJECT_DIR$/.idea/modules/alog/alog.iml" group="ALOG/alog" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="ALOG/app" />
     </modules>
   </component>
 </project>

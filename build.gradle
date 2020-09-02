@@ -23,7 +23,8 @@ buildscript {
 allprojects {
     repositories {
         maven {
-            url "https://raw.githubusercontent.com/SJJ-dot/repo/master/"
+            url "https://gitee.com/SJJ-dot/repo/raw/master"
+//            url "https://raw.githubusercontent.com/SJJ-dot/repo/master/"
         }
         maven {
             url 'https://maven.google.com/'
