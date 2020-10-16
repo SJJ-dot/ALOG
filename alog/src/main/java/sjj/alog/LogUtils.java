@@ -61,33 +61,34 @@ class LogUtils {
                     } catch (IOException ignored) {
                     }
                 }
-
-                print(lev, methodStr, s);
+                int length = s.length();
+                if (config.consolePrintAllLog && length > 3500) {
+                    for (int i = 0; i < length; i += 3000) {
+                        print(lev, methodStr, s.substring(i, Math.min(i + 3000,length)));
+                    }
+                } else {
+                    print(lev, methodStr, s);
+                }
             }
         });
 
     }
 
     private void print(int lev, String tag, String s) {
-        if (config.consolePrintAllLog && s.length() > 3500) {
-            print(lev, tag, s.substring(0, 3000));
-            print(lev, tag, s.substring(3000));
-        } else {
-            String tag2 = TextUtils.isEmpty(tag) ? "" : (tag + " ");
-            switch (lev) {
-                case Config.INFO:
-                    Log.i(config.tag, tag2 + s);
-                    break;
-                case Config.DEBUG:
-                    Log.d(config.tag, tag2 + s);
-                    break;
-                case Config.WARN:
-                    Log.w(config.tag, tag2 + s);
-                    break;
-                case Config.ERROR:
-                    Log.e(config.tag, tag2 + s);
-                    break;
-            }
+        String tag2 = TextUtils.isEmpty(tag) ? "" : (tag + " ");
+        switch (lev) {
+            case Config.INFO:
+                Log.i(config.tag, tag2 + s);
+                break;
+            case Config.DEBUG:
+                Log.d(config.tag, tag2 + s);
+                break;
+            case Config.WARN:
+                Log.w(config.tag, tag2 + s);
+                break;
+            case Config.ERROR:
+                Log.e(config.tag, tag2 + s);
+                break;
         }
     }
 

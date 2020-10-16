@@ -1,12 +1,12 @@
 # ALOG
 
-[ ![Download](https://api.bintray.com/packages/sjianjun/maven/aLog/images/download.svg?version=1.2.7) ](https://bintray.com/sjianjun/maven/aLog/1.2.7/link)
+[ ![Download](https://api.bintray.com/packages/sjianjun/maven/aLog/images/download.svg?version=1.2.8) ](https://bintray.com/sjianjun/maven/aLog/1.2.8/link)
 
 android 日志工具，输出日志行号，方便写入文件，支持单独配置。
 
 ## 使用
 ```
-implementation 'com.sjianjun:aLog:1.2.7'
+implementation 'com.sjianjun:aLog:1.2.8'
 ```
 ```java
 public class MainActivity extends AppCompatActivity {
