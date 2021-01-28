@@ -27,8 +27,8 @@ publish {
     userOrg = 'sjianjun'
     groupId = 'com.sjianjun'
     artifactId = 'aLog'
-    publishVersion = '1.2.8'
-    desc = 'Android log 日志输出小工具。支持写入文件'
+    publishVersion = '1.2.9'
+    desc = 'Android log 日志输出工具。支持写入文件，打印行号方便定位'
     website = 'https://github.com/lTBeL/ALOG'
     //   打包上传         .\gradlew clean build bintrayUpload -PbintrayUser=sjianjun -PbintrayKey=xxx -PdryRun=false
 
