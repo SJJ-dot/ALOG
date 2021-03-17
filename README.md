@@ -2,11 +2,27 @@
 
 [ ![Download](https://api.bintray.com/packages/sjianjun/maven/aLog/images/download.svg?version=1.2.8) ](https://bintray.com/sjianjun/maven/aLog/1.2.8/link)
 
+[![](https://jitpack.io/v/SJJ-dot/ALOG.svg)](https://jitpack.io/#SJJ-dot/ALOG)
+
 android 日志工具，输出日志行号，方便写入文件，支持单独配置。
 
 ## 使用
 ```
+//jcenter
 implementation 'com.sjianjun:aLog:1.2.8'
+
+//or
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+    implementation 'com.github.SJJ-dot:ALOG:Tag'
+}
+
 ```
 ```java
 public class MainActivity extends AppCompatActivity {
