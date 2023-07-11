@@ -35,11 +35,11 @@ public class LogFile {
 
     public synchronized void deleteOldLogFile() {
         File dir = getLogDir();
-        Calendar instance = Calendar.getInstance();
         Set<String> strings = new HashSet<>();
         SimpleDateFormat ymd = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault());
         for (int i = 0; i < 7; i++) {
-            instance.add(Calendar.DAY_OF_MONTH, -1);
+            Calendar instance = Calendar.getInstance();
+            instance.add(Calendar.DAY_OF_MONTH, -i);
             strings.add(ymd.format(instance.getTime()));
         }
         File[] oldLogs = dir.listFiles();
