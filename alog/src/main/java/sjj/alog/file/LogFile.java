@@ -65,6 +65,7 @@ public class LogFile {
                     f.delete();
                 }
             }
+            file.delete();
         }
 
     }
