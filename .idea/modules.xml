@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/alog/ALOG-alog.iml" filepath="$PROJECT_DIR$/alog/ALOG-alog.iml" group="ALOG/alog" />
-      <module fileurl="file://$PROJECT_DIR$/app/ALOG-app.iml" filepath="$PROJECT_DIR$/app/ALOG-app.iml" group="ALOG/app" />
-      <module fileurl="file://$PROJECT_DIR$/androidWork-ALOG.iml" filepath="$PROJECT_DIR$/androidWork-ALOG.iml" group="ALOG" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ALOG.iml" filepath="$PROJECT_DIR$/.idea/modules/ALOG.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.iml" filepath="$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.main.iml" filepath="$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/alog/ALOG.alog.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ALOG.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ALOG.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ALOG.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ALOG.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ALOG.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ALOG.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ALOG.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ALOG.app.unitTest.iml" />
     </modules>
   </component>
 </project>
