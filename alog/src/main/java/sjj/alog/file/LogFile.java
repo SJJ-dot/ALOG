@@ -46,9 +46,27 @@ public class LogFile {
         if (oldLogs != null)
             for (File file : oldLogs) {
                 if (!strings.contains(file.getName())) {
-                    boolean delete = file.delete();
+                    deleteFile(file);
                 }
             }
+    }
+
+    public void deleteFile(File file) {
+        if (!file.exists()) {
+            return;
+        }
+        if (file.isFile()) {
+            file.delete();
+        } else {
+            for (File f : file.listFiles()) {
+                if (f.isDirectory()) {
+                    deleteFile(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+
     }
 
     private synchronized File getLogDir() {
